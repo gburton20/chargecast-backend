@@ -22,15 +22,16 @@ RUN pip install --upgrade pip && \
 # Copy project
 COPY . .
 
-# Copy and set permissions for start script
-COPY start.sh /app/start.sh
-RUN chmod +x /app/start.sh
-
 # Collect static files (skip if fails)
 RUN python manage.py collectstatic --noinput || echo "Static files collection skipped"
 
 # Expose port
-EXPOSE $PORT
+EXPOSE 8000
 
-# Run the startup script with bash explicitly
-CMD ["/bin/bash", "/app/start.sh"]
+# Start command - inline everything
+CMD python manage.py migrate && \
+    exec gunicorn chargecast_backend.wsgi:application \
+    --bind 0.0.0.0:${PORT:-8000} \
+    --workers 2 \
+    --timeout 0 \
+    --log-level debug
