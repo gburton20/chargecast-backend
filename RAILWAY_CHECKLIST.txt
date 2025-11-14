@@ -1,0 +1,41 @@
+RAILWAY DEPLOYMENT CHECKLIST
+============================
+
+Pre-Deployment (In Railway Dashboard)
+□ PostgreSQL database added to project
+□ Environment variables set:
+  □ DEBUG=False
+  □ SECRET_KEY=<your-generated-key>
+  □ ALLOWED_HOSTS=.railway.app
+□ Service connected to GitHub repository
+
+Deploy
+□ Commit and push changes to GitHub
+□ Railway auto-deploys (or manually trigger)
+□ Watch deployment logs for errors
+
+Post-Deployment Verification
+□ Check deployment logs show:
+  □ "Collecting static files..." success
+  □ "Running migrations..." success  
+  □ Gunicorn started successfully
+  □ No database connection errors
+
+□ Test health endpoint:
+  curl https://your-app.railway.app/api/v1/health/
+  Expected: {"status":"ok"}
+
+□ Test API endpoint:
+  curl "https://your-app.railway.app/api/v1/carbon/regional/current-30m/?postcode=SW1A1AA"
+  Expected: JSON response with carbon data
+
+If Deployment Fails
+□ Check Railway deployment logs (click on deployment → View Logs)
+□ Verify all environment variables are set
+□ Ensure PostgreSQL service is running
+□ Check that DATABASE_URL environment variable exists
+□ Review FIXES_APPLIED.md for common issues
+□ See RAILWAY_DEPLOYMENT.md for detailed troubleshooting
+
+Quick Command to Generate SECRET_KEY
+python -c 'from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())'

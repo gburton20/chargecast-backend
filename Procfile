@@ -1,1 +1,1 @@
-web: gunicorn chargecast_backend.wsgi --bind 0.0.0.0:$PORT --workers 3 --log-file -
+web: gunicorn chargecast_backend.wsgi --bind 0.0.0.0:$PORT --workers 2 --threads 4 --timeout 120 --access-logfile - --error-logfile - --log-level info
