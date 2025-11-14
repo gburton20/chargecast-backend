@@ -28,7 +28,7 @@ SECRET_KEY = os.getenv("SECRET_KEY", "unsafe-secret-key-for-dev")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv("DExBUG", "False") == "True"
 
-ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "localhost,127.0.0.1").split(",")
+ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "localhost, 127.0.0.1", "chargecast-backend-production.up.railway.app").split(",")
 
 
 # Application definition
