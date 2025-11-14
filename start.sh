@@ -1,6 +1,9 @@
 #!/bin/bash
 set -e
 
+# Set default port if not provided by Railway
+PORT=${PORT:-8000}
+
 echo "=== Starting ChargeCast Backend ==="
 echo "Port: ${PORT}"
 
