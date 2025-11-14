@@ -28,5 +28,5 @@ RUN python manage.py collectstatic --noinput || echo "Static files collection sk
 # Expose port
 EXPOSE $PORT
 
-# Use Procfile for startup
-CMD python manage.py migrate && gunicorn chargecast_backend.wsgi:application --bind 0.0.0.0:$PORT --workers 2 --threads 4 --timeout 120 --access-logfile - --error-logfile - --log-level debug
+# Use shell form to ensure PORT variable is expanded
+CMD python manage.py migrate && echo "Starting gunicorn on port $PORT" && gunicorn chargecast_backend.wsgi:application --bind 0.0.0.0:$PORT --workers 2 --threads 4 --timeout 120 --access-logfile - --error-logfile - --log-level debug --preload
