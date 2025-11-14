@@ -32,5 +32,5 @@ RUN python manage.py collectstatic --noinput || echo "Static files collection sk
 # Expose port
 EXPOSE $PORT
 
-# Run the startup script
-CMD ["/app/start.sh"]
+# Run the startup script with bash explicitly
+CMD ["/bin/bash", "/app/start.sh"]
