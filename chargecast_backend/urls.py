@@ -21,6 +21,7 @@ from django.urls import path
 from carbon import views as carbon_views
 
 urlpatterns = [
+    path("", carbon_views.health, name="root"),  # Root URL
     path(
         "admin/", admin.site.urls
     ),

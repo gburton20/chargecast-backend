@@ -22,14 +22,17 @@ RUN pip install --upgrade pip && \
 # Copy project
 COPY . .
 
-# Collect static files
-RUN python manage.py collectstatic --noinput
+# Collect static files (skip if fails)
+RUN python manage.py collectstatic --noinput || echo "Static files collection skipped"
 
 # Expose port
 EXPOSE $PORT
 
 # Run migrations and start server
-CMD python manage.py migrate && \
+CMD echo "Starting application..." && \
+    echo "Running migrations..." && \
+    python manage.py migrate && \
+    echo "Starting gunicorn on port $PORT..." && \
     gunicorn chargecast_backend.wsgi \
     --bind 0.0.0.0:$PORT \
     --workers 2 \
