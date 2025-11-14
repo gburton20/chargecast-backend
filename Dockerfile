@@ -29,15 +29,4 @@ RUN python manage.py collectstatic --noinput || echo "Static files collection sk
 EXPOSE $PORT
 
 # Run migrations and start server
-CMD echo "Starting application..." && \
-    echo "Running migrations..." && \
-    python manage.py migrate && \
-    echo "Starting gunicorn on port $PORT..." && \
-    gunicorn chargecast_backend.wsgi \
-    --bind 0.0.0.0:$PORT \
-    --workers 2 \
-    --threads 4 \
-    --timeout 120 \
-    --access-logfile - \
-    --error-logfile - \
-    --log-level info
+CMD ["sh", "-c", "python manage.py migrate && gunicorn chargecast_backend.wsgi --bind 0.0.0.0:$PORT --workers 2 --threads 4 --timeout 120 --access-logfile - --error-logfile - --log-level info"]
