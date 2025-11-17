@@ -33,7 +33,7 @@ ALLOWED_HOSTS = [
     h.strip()
     for h in os.getenv(
         "ALLOWED_HOSTS",
-        "localhost,127.0.0.1,chargecast-backend-production.up.railway.app",
+        "localhost,127.0.0.1,.railway.app,.onrender.com",
     ).split(",")
     if h.strip()
 ]
@@ -75,6 +75,16 @@ CORS_ALLOWED_ORIGINS = [
     for origin in os.getenv("CORS_ALLOWED_ORIGINS", "").split(",") 
     if origin.strip()
 ] if not CORS_ALLOW_ALL_ORIGINS else []
+
+# CSRF trusted origins for production (needed for POST requests)
+CSRF_TRUSTED_ORIGINS = [
+    origin.strip()
+    for origin in os.getenv(
+        "CSRF_TRUSTED_ORIGINS",
+        "https://*.railway.app,https://*.onrender.com"
+    ).split(",")
+    if origin.strip()
+]
 
 REST_FRAMEWORK = {
     "DEFAULT_RENDERER_CLASSES": [
