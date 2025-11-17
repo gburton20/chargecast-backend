@@ -41,3 +41,13 @@ Thumbs.db
 .coverage
 htmlcov/
 .pytest_cache/
+
+# Documentation (deployment notes - not needed in repo)
+CRITICAL_ISSUES_FIXED.md
+DEPLOYMENT_FIXES_SUMMARY.md
+FIXES_APPLIED.md
+DEPLOYMENT_CHECKLIST.md
+PRE-COMMIT-CHECKLIST.md
+RAILWAY_CHECKLIST.txt
+RAILWAY_DEPLOYMENT.md
+RENDER_DEV_LOGS.MD
