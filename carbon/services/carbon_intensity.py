@@ -3,6 +3,7 @@ from __future__ import annotations
 import os
 from datetime import datetime, timedelta, timezone
 from typing import Any, Dict, List
+from urllib.parse import quote
 
 import requests
 
@@ -43,8 +44,10 @@ def get_regional_intensity_range(
     # Returns the raw 'data' list from NESO.
     from_str = _format_neso_datetime(from_dt)
     to_str = _format_neso_datetime(to_dt)
-
-    path = f"/regional/intensity/{from_str}/{to_str}/postcode/{postcode}"
+    
+    # URL-encode the postcode to handle spaces (e.g., "SW1A 1AA")
+    encoded_postcode = quote(postcode, safe='')
+    path = f"/regional/intensity/{from_str}/{to_str}/postcode/{encoded_postcode}"
 
     data = _request(path)
     return data["data"]

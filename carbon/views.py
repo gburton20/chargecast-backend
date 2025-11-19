@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from urllib.parse import unquote
 
 # Create your views here.
 from rest_framework.decorators import api_view
@@ -20,7 +21,10 @@ def _get_postcode_from_request(request):
     postcode = request.query_params.get("postcode")
     if not postcode:
         raise ValueError("Missing required query parameter: 'postcode'")
-    return postcode
+    # Django REST Framework automatically decodes URL parameters,
+    # but ensure any double-encoding is handled
+    postcode = unquote(postcode)
+    return postcode.strip()
 
 @api_view(["GET"])
 def regional_history_7d(request):
