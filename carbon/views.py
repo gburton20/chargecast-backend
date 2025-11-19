@@ -36,7 +36,20 @@ def regional_history_7d(request):
     except CarbonIntensityError as exc:
         return Response({"detail": str(exc)}, status=status.HTTP_502_BAD_GATEWAY)
     
-    return Response({"data": data})
+    # Extract region metadata from first data point
+    region_info = {}
+    if data and isinstance(data, list) and len(data) > 0:
+        first_item = data[0]
+        if isinstance(first_item, dict):
+            region_info = {
+                'region': first_item.get('region'),
+                'shortname': first_item.get('shortname'),
+                'regionid': first_item.get('regionid'),
+                'dnoregion': first_item.get('dnoregion')
+            }
+    
+    # Return full postcode and region info for partner's Streamlit components
+    return Response({"data": data, "postcode": postcode, **region_info})
 
 @api_view(["GET"])
 def regional_current_30m(request):
@@ -48,7 +61,20 @@ def regional_current_30m(request):
     except CarbonIntensityError as exc:
         return Response({"detail": str(exc)}, status=status.HTTP_502_BAD_GATEWAY)
     
-    return Response({"data": data})
+    # Extract region metadata from first data point
+    region_info = {}
+    if data and isinstance(data, list) and len(data) > 0:
+        first_item = data[0]
+        if isinstance(first_item, dict):
+            region_info = {
+                'region': first_item.get('region'),
+                'shortname': first_item.get('shortname'),
+                'regionid': first_item.get('regionid'),
+                'dnoregion': first_item.get('dnoregion')
+            }
+    
+    # Return full postcode and region info for partner's Streamlit components
+    return Response({"data": data, "postcode": postcode, **region_info})
 
 @api_view(["GET"])
 def regional_forecast_48h(request):
@@ -60,4 +86,17 @@ def regional_forecast_48h(request):
     except CarbonIntensityError as exc:
         return Response({"detail": str(exc)}, status=status.HTTP_502_BAD_GATEWAY)
     
-    return Response({"data": data})
+    # Extract region metadata from first data point
+    region_info = {}
+    if data and isinstance(data, list) and len(data) > 0:
+        first_item = data[0]
+        if isinstance(first_item, dict):
+            region_info = {
+                'region': first_item.get('region'),
+                'shortname': first_item.get('shortname'),
+                'regionid': first_item.get('regionid'),
+                'dnoregion': first_item.get('dnoregion')
+            }
+    
+    # Return full postcode and region info for partner's Streamlit components
+    return Response({"data": data, "postcode": postcode, **region_info})

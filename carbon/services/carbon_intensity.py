@@ -13,6 +13,39 @@ TIMEOUT = 10 # seconds
 class CarbonIntensityError(Exception):
     pass
 
+def _extract_outward_code(postcode: str) -> str:
+    """
+    Extract the outward code (first part) from a full UK postcode.
+    
+    Examples:
+        "SW1A 1AA" -> "SW1A"
+        "M1 1AE" -> "M1"
+        "B33 8TH" -> "B33"
+        "SW1A" -> "SW1A" (already outward code)
+    
+    Args:
+        postcode: Full UK postcode (with or without space) or outward code only
+    
+    Returns:
+        The outward code portion of the postcode
+    """
+    # Remove any extra whitespace and convert to uppercase
+    postcode = postcode.strip().upper()
+    
+    # If there's a space, take everything before it
+    if ' ' in postcode:
+        return postcode.split(' ')[0]
+    
+    # If no space, check if it looks like a full postcode without space
+    # Full postcodes end with: digit + letter + letter
+    # If it matches that pattern, extract the outward code
+    if len(postcode) >= 5:
+        # Take everything except the last 3 characters (inward code)
+        return postcode[:-3]
+    
+    # Otherwise, assume it's already an outward code
+    return postcode
+
 def _request(path: str, params: Dict[str, Any] | None = None) -> Dict[str, Any]:
     url = f"{BASE_URL.rstrip('/')}/{path.lstrip('/')}"
     try: 
@@ -42,11 +75,15 @@ def get_regional_intensity_range(
 ) -> List[Dict[str, Any]]:
     # Calls: /regional/intensity/{from}/{to}/postcode/{postcode}
     # Returns the raw 'data' list from NESO.
+    # Note: Carbon Intensity API only accepts outward codes (e.g., "SW1A", not "SW1A 1AA")
     from_str = _format_neso_datetime(from_dt)
     to_str = _format_neso_datetime(to_dt)
     
-    # URL-encode the postcode to handle spaces (e.g., "SW1A 1AA")
-    encoded_postcode = quote(postcode, safe='')
+    # Extract outward code from full postcode
+    outward_code = _extract_outward_code(postcode)
+    
+    # URL-encode the outward code
+    encoded_postcode = quote(outward_code, safe='')
     path = f"/regional/intensity/{from_str}/{to_str}/postcode/{encoded_postcode}"
 
     data = _request(path)
